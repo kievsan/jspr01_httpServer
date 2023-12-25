@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.concurrent.Executors;
 
+
 public class ServerMultithreaded extends Server {
     protected int port;
     protected final int threads;
@@ -15,15 +16,17 @@ public class ServerMultithreaded extends Server {
     @Override
     public void start(int nPort) {
         this.port = nPort;
+        final var threadPool = Executors.newFixedThreadPool(threads);
 
         try (final var serverSocket = new ServerSocket(port)) {
             while (true) {
-                System.out.print("CONNECT...");
-                final var socket = serverSocket.accept();
-                Executors.newFixedThreadPool(threads).submit(() -> connect(socket));
+                var socket = serverSocket.accept();
+                threadPool.submit(() -> connect(socket));
             }
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            threadPool.shutdown();
         }
     }
 

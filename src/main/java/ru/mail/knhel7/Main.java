@@ -1,25 +1,24 @@
 package ru.mail.knhel7;
 
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
-import java.util.Arrays;
+
 
 public class Main {
     public static final String DIR = "public";
     public static final String GET = "GET";
     public static final String POST = "POST";
+
     public static void main(String[] args) throws UnsupportedOperationException {
-        Server server = new ServerMultithreaded(64);
+        Server server = new ServerMultithreaded(2);
         initHandlers(server);
 
         server.handlers.printHandlers();
         System.out.println("\nSTART server: " + server.getThreads() + " threads.");
 
         server.start(9999);
-
   }
 
     private static void initHandlers(Server server) {
