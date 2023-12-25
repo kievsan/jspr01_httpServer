@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
+
 
 public interface IHandlerPool {
 
@@ -25,11 +25,9 @@ public interface IHandlerPool {
         if (handlersMap.isEmpty()) {
             return Optional.empty();
         }
-        String _method = String.valueOf(
-                getHandlers(method, path).keySet().stream().findFirst());
-        String _path= String.valueOf(
-                getHandlers(method, path).get(_method).keySet().stream().findFirst());
-        System.out.print("Выбран обработчик " + method + "  " + path); //+++++++
+        String _method = getHandlers(method, path).keySet().stream().findFirst().get();
+        String _path = getHandlers(method, path).get(_method).keySet().stream().findFirst().get();
+        System.out.println("Выбран обработчик " + _method + "  " + _path); //+++++++
 
         return Optional.of(handlersMap.get(_method).get(_path));
     }
@@ -65,7 +63,7 @@ public interface IHandlerPool {
     }
 
     default Map<String, Map<String, IHandler>> getHandlers(String method, String path) {
-        System.out.println("getting... Handler for " + method + "  " + path) ;
+        System.out.println("getting... Handler for " + method + "  " + path);
 
         final String method_ = validateMethod(method);
         final String path_ = validatePath(path);
